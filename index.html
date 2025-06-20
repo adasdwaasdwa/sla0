@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jogos Disponíveis</title>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+    #background-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #snow-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 90%;
+      max-width: 320px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    #imagem-central {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .animar {
+      animation: pulo-brilho 0.5s ease;
+    }
+    @keyframes pulo-brilho {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.2);
+        filter: brightness(1.5);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+    .container a {
+      position: relative;
+      width: 160px;
+      height: 50px;
+      line-height: 48px;
+      background: #000;
+      text-transform: uppercase;
+      font-size: 25px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: 0.5s;
+      -webkit-box-reflect: below 1px linear-gradient(transparent, #0004);
+      margin-bottom: 10px;
+      display: inline-block;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .container a span {
+      position: absolute;
+      display: block;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      text-align: center;
+      background: #0c0c0c;
+      color: rgba(255, 255, 255, 0.8);
+      transition: 0.5s;
+      line-height: 48px;
+      border-radius: 16px;
+      z-index: 2;
+      user-select: none;
+    }
+    .container a:hover span {
+      color: rgba(255, 255, 255, 1);
+    }
+    .container a span::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 10;
+      border-radius: 16px 16px 0 0;
+    }
+    .container a::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        45deg,
+        #c0392b,
+        #f39c12,
+        #f1c40f,
+        #2ecc71,
+        #3498db,
+        #2980b9,
+        #9b59b6,
+        #8e44ad,
+        #c0392b,
+        #f39c12,
+        #f1c40f,
+        #2ecc71,
+        #3498db,
+        #2980b9,
+        #9b59b6,
+        #8e44ad
+      );
+      background-size: 400%;
+      opacity: 0;
+      transition: 2.5s;
+      animation: eff 20s linear infinite;
+      z-index: 1;
+      border-radius: 16px;
+      filter: blur(4px);
+    }
+    .container a:hover::before,
+    .container a:hover::after {
+      opacity: 1;
+    }
+    .container a::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        45deg,
+        #c0392b,
+        #f39c12,
+        #f1c40f,
+        #2ecc71,
+        #3498db,
+        #2980b9,
+        #9b59b6,
+        #8e44ad,
+        #c0392b,
+        #f39c12,
+        #f1c40f,
+        #2ecc71,
+        #3498db,
+        #2980b9,
+        #9b59b6,
+        #8e44ad
+      );
+      background-size: 400%;
+      opacity: 0;
+      filter: blur(20px);
+      transition: 0.5s;
+      animation: eff 20s ease infinite;
+      z-index: 0;
+      border-radius: 16px;
+    }
+    @keyframes eff {
+      0% {
+        background-position: 0 0;
+      }
+      50% {
+        background-position: 400% 0;
+      }
+      100% {
+        background-position: 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <video autoplay loop muted id="background-video">
+    <source src="https://cdn.videezy.com/system/resources/previews/000/040/567/original/abstract-blue-lines-background.mp4" type="video/mp4" />
+    Seu navegador não suporta vídeos HTML5.
+  </video>
+
+  <canvas id="snow-canvas"></canvas>
+
+  <div class="container">
+    <img 
+      id="imagem-central"
+      src="https://cdn.discordapp.com/attachments/1385394874198524069/1385434051204223109/7802e0691c1df035f83486d6a4a157bb.jpg?ex=68560d81&is=6854bc01&hm=9ad5528fc09c772948aa47164c56668464e1446eddd33e6d685b6df2cd973e9a&" 
+      alt="Imagem Central" />
+
+    <a href="https://abrir.link/aADtC"><span>🍡 Condo Game</span></a>
+    <a href="https://abrir.link/fbxho"><span>🍕 Condo Game</span></a>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const flakes = [];
+    const flakeCount = 150;
+
+    for (let i = 0; i < flakeCount; i++) {
+      flakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 4 + 1,
+        d: Math.random() * flakeCount
+      });
+    }
+
+    function drawFlakes() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      for (let i = 0; i < flakeCount; i++) {
+        const f = flakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      }
+      ctx.fill();
+      moveFlakes();
+    }
+
+    let angle = 0;
+
+    function moveFlakes() {
+      angle += 0.01;
+      for (let i = 0; i < flakeCount; i++) {
+        const f = flakes[i];
+        f.y += Math.cos(angle + f.d) + 1 + f.r / 2;
+        f.x += Math.sin(angle) * 2;
+
+        if (f.y > height) {
+          flakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d };
+        }
+
+        if (f.x > width) {
+          f.x = 0;
+        } else if (f.x < 0) {
+          f.x = width;
+        }
+      }
+    }
+
+    function animate() {
+      drawFlakes();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Animação da imagem ao clicar
+    const imagem = document.getElementById("imagem-central");
+    imagem.addEventListener("click", () => {
+      imagem.classList.add("animar");
+      setTimeout(() => {
+        imagem.classList.remove("animar");
+      }, 500);
+    });
+  </script>
+</body>
+</html>
